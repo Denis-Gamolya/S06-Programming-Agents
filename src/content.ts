@@ -102,6 +102,79 @@ const MYCELIUM_NETWORK: Purchasable = {
   effects: [{ kind: "rateMult", value: 2 }, { kind: "clickMult", value: 2 }],
 };
 
+const MOREL: Purchasable = {
+  id: "morel",
+  name: "Morel",
+  flavor: "Hides under leaf litter. Worth the search.",
+  icon: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <path d="M24 8c-9 0-14 6-14 11 0 3 2 4 4 4h20c2 0 4-1 4-4 0-5-5-11-14-11z" fill="#c8a06a"/>
+  <g fill="#8a6a3e">
+    <circle cx="17" cy="14" r="2.5"/>
+    <circle cx="25" cy="12" r="2"/>
+    <circle cx="31" cy="15" r="2.5"/>
+    <circle cx="21" cy="18" r="2"/>
+    <circle cx="29" cy="19" r="1.5"/>
+  </g>
+  <path d="M20 23h8v12a2.5 2.5 0 0 1-2.5 2.5h-3A2.5 2.5 0 0 1 20 35z" fill="#efe3c8"/>
+</svg>`,
+  baseCost: 12_000,
+  costGrowth: 1.15,
+  repeatable: true,
+  effects: [{ kind: "rateAdd", value: 47 }],
+};
+
+const PORCINI: Purchasable = {
+  id: "porcini",
+  name: "Porcini",
+  flavor: "Thick-stemmed and unbothered.",
+  icon: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <path d="M24 6c-12 0-19 8-19 15 0 4 4 6 8 6h22c4 0 8-2 8-6 0-7-7-15-19-15z" fill="#8a5a36"/>
+  <path d="M24 6c-12 0-19 8-19 15 0 4 4 6 8 6h8V6z" fill="#7a4c2c"/>
+  <path d="M17 27h14v13a3 3 0 0 1-3 3h-8a3 3 0 0 1-3-3z" fill="#e6d9bd"/>
+</svg>`,
+  baseCost: 130_000,
+  costGrowth: 1.15,
+  repeatable: true,
+  effects: [{ kind: "rateAdd", value: 260 }],
+};
+
+const REISHI: Purchasable = {
+  id: "reishi",
+  name: "Reishi",
+  flavor: "A lacquered shelf of patience.",
+  icon: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <path d="M4 30c0-4 6-7 20-7s20 3 20 7c0 3-8 5-20 5S4 33 4 30z" fill="#a63a2a"/>
+  <path d="M4 30c0-4 6-7 20-7s20 3 20 7" fill="none" stroke="#7c2618" stroke-width="2"/>
+  <path d="M8 27c3-2 9-3 16-3s13 1 16 3" fill="none" stroke="#d97a4a" stroke-width="2"/>
+  <path d="M12 24c3-1 8-2 12-2s9 1 12 2" fill="none" stroke="#e8b04b" stroke-width="1.5"/>
+  <path d="M20 33h8v8a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z" fill="#e6d9bd"/>
+</svg>`,
+  baseCost: 1_400_000,
+  costGrowth: 1.15,
+  repeatable: true,
+  effects: [{ kind: "rateAdd", value: 1_400 }],
+};
+
+const FAIRY_RING: Purchasable = {
+  id: "fairy-ring",
+  name: "Fairy Ring",
+  flavor: "Stand inside, and everything grows faster.",
+  icon: `<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+  <ellipse cx="24" cy="34" rx="17" ry="7" fill="none" stroke="#7a9b57" stroke-width="2" stroke-dasharray="4 3"/>
+  <g fill="#f2e8cf">
+    <path d="M8 30c0-3 2.5-5 5-5s5 2 5 5h-10z"/>
+    <path d="M30 30c0-3 2.5-5 5-5s5 2 5 5h-10z"/>
+  </g>
+  <g fill="#e8b04b">
+    <path d="M19 27c0-3 2.5-5 5-5s5 2 5 5h-10z"/>
+  </g>
+</svg>`,
+  baseCost: 500_000,
+  costGrowth: 1,
+  repeatable: false,
+  effects: [{ kind: "rateMult", value: 3 }],
+};
+
 /** Shop order is display order; the cheapest thing to buy comes first. */
 export const PURCHASABLES: Purchasable[] = [
   BUTTON_MUSHROOM,
@@ -110,4 +183,8 @@ export const PURCHASABLES: Purchasable[] = [
   SPORE_VENTS,
   CHANTERELLE,
   MYCELIUM_NETWORK,
+  MOREL,
+  FAIRY_RING,
+  PORCINI,
+  REISHI,
 ];

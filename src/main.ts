@@ -14,9 +14,10 @@ import {
   updatePatch,
   updateShop,
 } from "./render.ts";
+import { clearSave, load, save } from "./save.ts";
 import { initialState } from "./state.ts";
 
-const state = initialState();
+const state = load() ?? initialState();
 // Derived rates change only when the garden changes, never per frame.
 let rates = derive(state.owned);
 
@@ -57,15 +58,65 @@ cardList.addEventListener("click", (event) => {
 // rate x seconds-elapsed, so the counter moves smoothly and survives tab
 // switches (a paused rAF catches up with one big delta on return).
 let last = performance.now();
+let sinceSave = 0;
 function frame(now: number): void {
   const seconds = (now - last) / 1000;
   last = now;
   const grown = rates.sporesPerSecond * seconds;
   state.spores += grown;
   state.totalSpores += grown;
+  sinceSave += seconds;
+  if (sinceSave >= 5) {
+    sinceSave = 0;
+    save(state);
+  }
   update(state, rates);
   updateShop(state);
   updatePatch(state);
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+
+// Flush before the tab sleeps or closes so no progress is lost.
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") save(state);
+});
+addEventListener("pagehide", () => save(state));
+
+// Resetting takes two taps: the first arms the button, the second (within
+// five seconds) wipes both the state and its save.
+const resetButton = document.querySelector<HTMLButtonElement>("#reset")!;
+let resetArmed = false;
+let resetTimer: ReturnType<typeof setTimeout> | undefined;
+
+function resetGarden(): void {
+  clearSave();
+  const fresh = initialState();
+  state.spores = fresh.spores;
+  state.totalSpores = fresh.totalSpores;
+  state.totalClicks = fresh.totalClicks;
+  state.owned = fresh.owned;
+  rates = derive(state.owned);
+  update(state, rates);
+  updateShop(state);
+  updatePatch(state);
+}
+
+resetButton.addEventListener("click", () => {
+  if (!resetArmed) {
+    resetArmed = true;
+    resetButton.textContent = "sure? tap again";
+    resetButton.classList.add("armed");
+    resetTimer = setTimeout(() => {
+      resetArmed = false;
+      resetButton.textContent = "start over";
+      resetButton.classList.remove("armed");
+    }, 5000);
+    return;
+  }
+  clearTimeout(resetTimer);
+  resetArmed = false;
+  resetButton.textContent = "start over";
+  resetButton.classList.remove("armed");
+  resetGarden();
+});
