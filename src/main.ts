@@ -2,12 +2,16 @@
 // controls, and hand everything else to render.
 
 import "./style.css";
-import { formatSpores, type Rates } from "./economy.ts";
+import { BASE_SPORES_PER_SECOND, formatSpores, type Rates } from "./economy.ts";
 import { bump, mount, spawnFloater, update } from "./render.ts";
 import { initialState } from "./state.ts";
 
-// No content has been planted yet; the loop in a later step grows these.
-const RATES: Rates = { clickPower: 1, sporesPerSecond: 0 };
+// The patch starts dormant: passive growth is just the mycelium until the
+// player plants something (a later step reshapes this into derived rates).
+const RATES: Rates = {
+  clickPower: 1,
+  sporesPerSecond: BASE_SPORES_PER_SECOND,
+};
 
 const state = initialState();
 
@@ -15,6 +19,21 @@ mount();
 update(state, RATES);
 
 const clicker = document.querySelector<HTMLButtonElement>("#clicker")!;
+
+// Passive growth runs on animation frames, not a timer: each frame adds
+// rate x seconds-elapsed, so the counter moves smoothly and survives tab
+// switches (a paused rAF catches up with one big delta on return).
+let last = performance.now();
+function frame(now: number): void {
+  const seconds = (now - last) / 1000;
+  last = now;
+  const grown = RATES.sporesPerSecond * seconds;
+  state.spores += grown;
+  state.totalSpores += grown;
+  update(state, RATES);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
 
 clicker.addEventListener("click", (event) => {
   state.spores += RATES.clickPower;

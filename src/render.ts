@@ -17,6 +17,9 @@ export function mount(): void {
 
   const clicker = document.querySelector<HTMLButtonElement>("#clicker")!;
   clicker.innerHTML = BIG_MUSHROOM_SVG;
+
+  // The patch now grows on its own, so the per-second readout goes live.
+  rateEl.hidden = false;
 }
 
 /** Refresh every readout. Cheap enough to call on every animation frame. */

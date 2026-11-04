@@ -32,6 +32,9 @@ export interface Rates {
   sporesPerSecond: number;
 }
 
+/** Every garden drips a few spores: the dormant mycelium grows on its own. */
+export const BASE_SPORES_PER_SECOND = 0.2;
+
 const SUFFIXES = ["", "K", "M", "B", "T", "Qa", "Qi"];
 
 /** 1234.5 -> "1.23K". Values under 1000 render as whole numbers. */
