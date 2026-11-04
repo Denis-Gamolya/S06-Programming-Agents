@@ -1,20 +1,31 @@
-// Vite turns this import into a production-safe URL. Keep it as a file so
-// even this tiny example demonstrates a separately deployed asset.
-// @deno-types="./asset-url.d.ts"
-import tileUrl from "./assets/tile.svg?no-inline";
+// Mycelia — a mushroom-garden clicker. Bootstrap the state, wire the
+// controls, and hand everything else to render.
 
-const app = document.querySelector<HTMLElement>("#app")!;
+import "./style.css";
+import { formatSpores, type Rates } from "./economy.ts";
+import { bump, mount, spawnFloater, update } from "./render.ts";
+import { initialState } from "./state.ts";
 
-const heading = document.createElement("h1");
-heading.textContent = "D1 project";
+// No content has been planted yet; the loop in a later step grows these.
+const RATES: Rates = { clickPower: 1, sporesPerSecond: 0 };
 
-const image = document.createElement("img");
-image.src = tileUrl;
-image.alt = "A teal tile with a cream circle";
-image.width = 96;
-image.height = 96;
+const state = initialState();
 
-const message = document.createElement("p");
-message.textContent = "Your project starts here.";
+mount();
+update(state, RATES);
 
-app.append(heading, image, message);
+const clicker = document.querySelector<HTMLButtonElement>("#clicker")!;
+
+clicker.addEventListener("click", (event) => {
+  state.spores += RATES.clickPower;
+  state.totalSpores += RATES.clickPower;
+  state.totalClicks += 1;
+
+  // Keyboard clicks land at (0, 0); float from the mushroom's heart instead.
+  const rect = clicker.getBoundingClientRect();
+  const x = event.clientX || rect.left + rect.width / 2;
+  const y = event.clientY || rect.top + rect.height / 2;
+  spawnFloater(x, y, `+${formatSpores(RATES.clickPower)}`);
+  bump(clicker);
+  update(state, RATES);
+});

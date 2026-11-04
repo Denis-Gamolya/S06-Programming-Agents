@@ -3,10 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D1 project</title>
+    <title>Mycelia</title>
+    <meta
+      name="description"
+      content="A tiny mushroom-garden clicker: harvest spores and grow your patch."
+    />
   </head>
   <body>
-    <main id="app"></main>
+    <main id="app">
+      <header id="top">
+        <h1>Mycelia</h1>
+        <p id="tagline">a mushroom patch that never stops growing</p>
+        <div id="readout">
+          <span id="spores">0</span>
+          <span class="unit">spores</span>
+          <span id="rate" hidden>+0.0/s</span>
+        </div>
+      </header>
+      <section id="garden" aria-label="Your mushroom patch">
+        <button id="clicker" aria-label="Harvest spores"></button>
+        <div id="soil"></div>
+      </section>
+      <footer id="statsline"><span id="lifeline"></span></footer>
+    </main>
+    <div id="toast" role="status" hidden></div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
